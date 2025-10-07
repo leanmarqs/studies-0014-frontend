@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 const API = import.meta.env.VITE_API_URL || "https://studies-0014-backend.onrender.com";
-// "https://studies-0014-backend.onrender.com";
+
+console.log("🔗 API URL:", API);
 
 // Tipo para capturar os erros enviados pelo Zod
 interface ZodIssue {
