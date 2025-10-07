@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 
 const API = import.meta.env.VITE_API_URL || "https://studies-0014-backend.onrender.com";
 
-
-
 type User = {
   id: number;
   name: string;
@@ -15,27 +13,14 @@ export default function UserList() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   fetch(`${API}/users`)
-  //     .then(r => r.json())
-  //     .then(data => {  
-  //       setUsers(data.users || []); 
-  //       setLoading(false); })
-  //     .catch(err => { console.error(err); setLoading(false); });
-  // }, []);
-
   useEffect(() => {
-  fetch(`${API}/users`)
-    .then(async (r) => {
-      const text = await r.text();
-      console.log("Resposta bruta do backend:", text);
-      const data = JSON.parse(text);
-      setUsers(data.users || []);
-      setLoading(false);
-    })
-    .catch(err => { console.error(err); setLoading(false); });
-}, []);
-
+    fetch(`${API}/users`)
+      .then(r => r.json())
+      .then(data => {  
+        setUsers(data.users || []); 
+        setLoading(false); })
+      .catch(err => { console.error(err); setLoading(false); });
+  }, []);
 
  
   if (loading) return <div>Carregando...</div>;
