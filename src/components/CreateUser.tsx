@@ -34,8 +34,9 @@ export default function CreateUser() {
         if (data.errors && Array.isArray(data.errors)) {
           const msgs = (data.errors as ZodIssue[])
             .map((err) => {
-              const field = err.path && err.path.length > 0 ? err.path[0] : "campo";
-              return `${field}: ${err.message}`;
+              // const field = err.path && err.path.length > 0 ? err.path[0] : "campo";
+              // return `${field}: ${err.message}`;
+              return `${err.message}`;
             })
             .join("\n");
           throw new Error(msgs);
@@ -52,7 +53,7 @@ export default function CreateUser() {
       setConfirmPassword("");
     } catch (err) {
       if (err instanceof Error) {
-        setMsg("Erro: " + err.message);
+        setMsg(err.message);
       } else {
         setMsg("Erro desconhecido ao criar usuário.");
       }
