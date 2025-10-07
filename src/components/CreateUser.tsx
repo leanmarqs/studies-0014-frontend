@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API = import.meta.env.VITE_API_URL || "https://studies-0014-backend.onrender.com";
 
 // Tipo para capturar os erros enviados pelo Zod
 interface ZodIssue {
-  path: (string | number)[];
+  path?: (string | number)[]; // pode ser indefinido
   message: string;
-  code: string;
+  code?: string;
 }
 
 export default function CreateUser() {
@@ -21,7 +21,6 @@ export default function CreateUser() {
     setMsg(null);
 
     try {
-      // 🔹 Envia os dados para o backend
       const res = await fetch(`${API}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,11 +33,13 @@ export default function CreateUser() {
         // 🔹 Trata erros de validação do Zod
         if (data.errors && Array.isArray(data.errors)) {
           const msgs = (data.errors as ZodIssue[])
-            .map((err) => `${err.path[0]}: ${err.message}`)
+            .map((err) => {
+              const field = err.path && err.path.length > 0 ? err.path[0] : "campo";
+              return `${field}: ${err.message}`;
+            })
             .join("\n");
           throw new Error(msgs);
         } else {
-          // Outros erros vindos do backend
           throw new Error(data.error || data.message || "Erro ao criar usuário");
         }
       }
@@ -62,7 +63,7 @@ export default function CreateUser() {
     <div className="max-w-md mx-auto bg-zinc-800 p-6 rounded-lg shadow">
       <h2 className="text-lg font-semibold mb-4">Criar Usuário</h2>
 
-      {msg && <div className="mb-4 whitespace-pre-wrap">{msg}</div>}
+      {msg && <div className="mb-4 whitespace-pre-wrap text-red-400">{msg}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
